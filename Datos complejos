@@ -1,0 +1,112 @@
+#1 diccionario precio frutas
+
+precios_frutas = {'Banana': 1200, 'Ananá': 2500, 'Melón': 3000, 'Uva': 1450}
+
+precios_frutas['Naranja']= 1200
+precios_frutas['Manzana']= 1500
+precios_frutas['Pera']= 2300
+
+#2 Actualizar precio de frutas
+
+precios_frutas['Banana'] = 1330
+precios_frutas['Manzana']= 1700
+precios_frutas['Melón']= 2800
+
+#3 crear lista que solo contenga las frutas sin los precios
+
+lista_frutas = list(precios_frutas.keys())
+print(lista_frutas)
+
+#4 almacenar y consultar numeros telefonicos
+
+contactos = {}
+
+for i in range(5):
+    nombre = input(f"Ingrese el nombre del contacto {i+1}: ")
+    numero = input(f"Ingrese el numero del contacto {nombre}: ")
+    contactos[nombre] = numero
+
+nombre_consulta = input("Escriba el nombre del contacto que desea buscar: ")
+if  nombre_consulta in contactos:
+    print(f"El numero de {nombre_consulta} es {contactos[nombre_consulta]}")
+else:
+    print(f"El contacto {nombre_consulta} no esta en la agenda")
+
+#5 Frases unicas
+
+frase = input("Ingrese una frase: ")
+palabras = frase.split()
+
+palabras_unicas = set(palabras)
+
+recuento = {}
+for palabra in palabras:
+    if palabra in recuento:
+        recuento[palabra] += 1
+    else:
+        recuento[palabra] = 1
+
+print("Palabras unicas:", palabras_unicas)
+print("Recuento:", recuento)
+
+#6 promedio de alumnos
+
+alumnos = {}
+
+for i in range(3):
+    nombre = input(f"Ingrese el nombre del alumno {i+1}: ")
+    nota1 = int(input("Nota 1: "))
+    nota2 = int(input("Nota 2: "))
+    nota3 = int(input("Nota 3: "))
+    alumnos[nombre] = (nota1, nota2, nota3)
+
+for nombre, notas in alumnos.items():
+    promedio = sum(notas) / len(notas)
+    print(f"{nombre} tiene un promedio de {promedio}")
+
+#7 estudiantes que aprobaron 
+
+parcial1 = {"50", "51", "52", "53"}
+parcial2 = {"52", "53", "54", "55"}
+
+ambos = parcial1 & parcial2
+print("Aprobaron ambos parciales:", ambos)
+
+solo_uno = parcial1 ^ parcial2
+print("Aprobaron solo uno:", solo_uno)
+
+al_menos_uno = parcial1 | parcial2
+print("Aprobaron al menos un parcial:", al_menos_uno)
+
+#8 productos y stock
+stock = {
+    "pan": 10,
+    "yerba": 5,
+    "leche": 12
+}
+
+producto = input("Ingrese el nombre del producto: ")
+
+if producto in stock:
+    cantidad = int(input("¿Cuantas unidades desea agregar?: "))
+    stock[producto] += cantidad
+    print(f"Nuevo stock de {producto}: {stock[producto]}")
+else:
+    cantidad = int(input("Producto nuevo. ¿Cuantas unidades tiene?: "))
+    stock[producto] = cantidad
+    print(f"{producto} agregado con stock de {cantidad}")
+
+#9
+agenda = {("lunes", "10:00"): "Reunion",("martes", "15:00"): "Clase de ingles"}
+
+dia = input("Ingrese el dia: ")
+hora = input("Ingrese la hora (formato HH:MM): ")
+
+evento = agenda.get((dia, hora), "No hay actividad en ese horario")
+print(evento)
+
+#10
+original = {"Argentina": "Buenos Aires","Chile": "Santiago","Uruguay": "Montevideo"}
+
+invertido = {capital: pais for pais, capital in original.items()}
+print("Diccionario invertido:", invertido)
