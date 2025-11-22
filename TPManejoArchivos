@@ -1,0 +1,117 @@
+import csv
+import os
+
+nombre_archivo = "Productos.txt"
+
+def crear_archivo():
+    if not os.path.exists(nombre_archivo):
+        productos = [
+            "Lapicera,120.5,30\n",
+            "Cuaderno,250,50\n",
+            "Goma,45,100\n"
+        ]
+
+        with open(nombre_archivo, "w", encoding='utf-8') as archivo:
+            archivo.writelines(productos)
+
+def leer_archivo():
+    productos=[]
+    if not os.path.exists(nombre_archivo):
+        return productos
+    with open(nombre_archivo, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            linea = linea.strip()
+            if not linea:
+                continue
+            partes = linea.split(",")
+            if len(partes) != 3:
+                continue
+            nombre = partes[0].strip()
+            precio_str = partes[1].strip()
+            cantidad_str = partes[2].strip()
+
+            if not (precio_str.isdigit() and cantidad_str.isdigit()):
+                continue
+            precio = int(precio_str)
+            cantidad = int(cantidad_str)
+            productos.append({
+                "NOMBRE": nombre,
+                "PRECIO": precio,
+                "CANTIDAD": cantidad
+            })
+    return productos
+
+def mostrar_productos(productos):
+    if not productos:
+        print("No hay productos para mostrar.")
+        return
+    for producto in productos:
+        print(f"Producto: {producto['NOMBRE']} | Precio: ${producto['PRECIO']} | Cantidad: {producto['CANTIDAD']}")
+
+def pedir_producto():
+    nombre= input("Ingrese el nombre del productos: ").strip()
+    while not nombre:
+        print("Nombre inválido. Intente de nuevo.")
+        nombre = input("Ingrese nombre del producto: ").strip()
+
+    precio_str = input("Ingrese precio: ").strip()
+    while not precio_str.isdigit():
+        print("Precio inválido. Ingrese solo dígitos.")
+        precio_str = input("Ingrese precio: ").strip()
+    precio = int(precio_str)
+
+    cantidad_str = input("Ingrese cantidad (entero): ").strip()
+    while not cantidad_str.isdigit():
+        print("Cantidad inválida.")
+        cantidad_str = input("Ingrese cantidad: ").strip()
+    cantidad = int(cantidad_str)
+
+    return {"NOMBRE": nombre, "PRECIO": precio, "CANTIDAD": cantidad}
+
+def agregar_producto_a_archivo(producto):
+    linea = f"{producto['NOMBRE']},{producto['PRECIO']},{producto['CANTIDAD']}\n"
+    with open(nombre_archivo, "a", encoding="utf-8") as archivo:
+        archivo.write(linea)
+
+def buscar_producto(productos, nombre_buscar):
+    nombre_buscar = nombre_buscar.strip().lower()
+    encontrados = []
+    for producto in productos:
+        if producto['NOMBRE'].strip().lower() == nombre_buscar:
+            encontrados.append(producto)
+    return encontrados
+
+def guardar_todos_los_productos(productos):
+    with open(nombre_archivo, "w", encoding="utf-8") as archivo:
+        for producto in productos:
+            archivo.write(f"{producto['NOMBRE']},{producto['PRECIO']},{producto['CANTIDAD']}\n")
+
+def main():
+    crear_archivo()
+
+    productos = leer_archivo()
+    print("\nProductos actuales:")
+    mostrar_productos(productos)
+
+    respuesta = input("\n¿Desea agregar un nuevo producto? (s/n): ").strip().lower()
+    while respuesta == "s":
+        nuevo = pedir_producto()
+        productos.append(nuevo)
+        agregar_producto_a_archivo(nuevo)
+        print("\nProducto agregado y guardado en el archivo.")
+        respuesta = input("\n¿Desea agregar otro producto? (s/n): ").strip().lower()
+
+    nombre_buscar = input("\nIngrese el nombre del producto a buscar: ").strip()
+    if nombre_buscar:
+        encontrados = buscar_producto(productos, nombre_buscar)
+        if encontrados:
+            print("\nProducto(s) encontrado(s):")
+            mostrar_productos(encontrados)
+        else:
+            print("No se encontró el producto.")
+
+    guardar_todos_los_productos(productos)
+    print("\nArchivo sobrescrito con los productos actualizados.")
+
+if __name__ == "__main__":
+    main()
