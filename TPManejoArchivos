@@ -1,22 +1,26 @@
-import csv
 import os
 
+#nombre del archivo donde se gaurdan los productos
 nombre_archivo = "Productos.txt"
 
 def crear_archivo():
+    #si el archivo no existe se crea uno con tres productos iniciales
     if not os.path.exists(nombre_archivo):
         productos = [
             "Lapicera,120.5,30\n",
             "Cuaderno,250,50\n",
             "Goma,45,100\n"
         ]
-
+        # se abre el archivo en modo escritura
         with open(nombre_archivo, "w", encoding='utf-8') as archivo:
             archivo.writelines(productos)
 
+
 def leer_archivo():
+    #Lee el archivo y devuelve una lista de diccionarios
     productos=[]
     if not os.path.exists(nombre_archivo):
+        #si no existe el archivo devuelve una lista vacia
         return productos
     with open(nombre_archivo, "r", encoding="utf-8") as archivo:
         for linea in archivo:
@@ -34,6 +38,7 @@ def leer_archivo():
                 continue
             precio = int(precio_str)
             cantidad = int(cantidad_str)
+            #se agregan los productos
             productos.append({
                 "NOMBRE": nombre,
                 "PRECIO": precio,
@@ -42,12 +47,14 @@ def leer_archivo():
     return productos
 
 def mostrar_productos(productos):
+    #mustra por pantalla la lista de productos
     if not productos:
         print("No hay productos para mostrar.")
         return
     for producto in productos:
         print(f"Producto: {producto['NOMBRE']} | Precio: ${producto['PRECIO']} | Cantidad: {producto['CANTIDAD']}")
 
+#pedimos los productos al usuario
 def pedir_producto():
     nombre= input("Ingrese el nombre del productos: ").strip()
     while not nombre:
@@ -66,13 +73,16 @@ def pedir_producto():
         cantidad_str = input("Ingrese cantidad: ").strip()
     cantidad = int(cantidad_str)
 
+    #retornamos el producto 
     return {"NOMBRE": nombre, "PRECIO": precio, "CANTIDAD": cantidad}
 
+#Agregamos el producto al archivo
 def agregar_producto_a_archivo(producto):
     linea = f"{producto['NOMBRE']},{producto['PRECIO']},{producto['CANTIDAD']}\n"
     with open(nombre_archivo, "a", encoding="utf-8") as archivo:
         archivo.write(linea)
 
+#Se busca el producto pidiendo el nombre del mismo
 def buscar_producto(productos, nombre_buscar):
     nombre_buscar = nombre_buscar.strip().lower()
     encontrados = []
@@ -81,6 +91,7 @@ def buscar_producto(productos, nombre_buscar):
             encontrados.append(producto)
     return encontrados
 
+#guardamos todos los prodductos sobreescribiendo el archivo en modo escritura 'w'
 def guardar_todos_los_productos(productos):
     with open(nombre_archivo, "w", encoding="utf-8") as archivo:
         for producto in productos:
@@ -93,6 +104,7 @@ def main():
     print("\nProductos actuales:")
     mostrar_productos(productos)
 
+#hacemos un bucle para poder ingresar varios productos
     respuesta = input("\n¿Desea agregar un nuevo producto? (s/n): ").strip().lower()
     while respuesta == "s":
         nuevo = pedir_producto()
